@@ -11,6 +11,7 @@ License:        Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND FSFUL AND MIT A
 URL:            https://www.tensorflow.org/
 Source0:        https://github.com/jlinton/tensorflow/archive/36ec840f8c5e504e4fe187bdb802918f621603d6.tar.gz
 Patch0:         Config-tensorflow.patch
+Patch1:         adding_python_bin_path.patch
 
 BuildRequires:  python-devel
 BuildRequires:  patch
@@ -24,18 +25,20 @@ BuildRequires:  bazel
 #BuildRequires:  python3-keras-applications
 #BuildRequires:  python3-keras-preprocessing
 BuildRequires:  numpy
+BuildRequires:  python3-numpy
 #BuildRequires:  python-google-apputils
+BuildRequires:  python3-google-apputils
 BuildRequires:  protobuf
 BuildRequires:  python3-protobuf
-#BuildRequires:  python-enum34
-#BuildRequires:  python3-astor
+BuildRequires:  python2-enum34
+#BuildRequires:  python2-astor
 BuildRequires:  python3-termcolor
 BuildRequires:  python3-werkzeug
 BuildRequires:  python3-markdown
 BuildRequires:  python3-setuptools
-#BuildRequires:  python-backports
-#BuildRequires:  python3-futures
-#BuildRequires:  python3-absl-py
+BuildRequires:  python2-backports
+#BuildRequires:  python2-futures
+#BuildRequires:  python2-absl-py
 
 
 Provides:       python3-tensorflow
@@ -96,11 +99,13 @@ more CPUs in a desktop, server, or mobile device without rewriting code.
 %prep
 %setup -n tensorflow-36ec840f8c5e504e4fe187bdb802918f621603d6
 %patch0 -p0
+%patch1 -p0
 
 
 %build
 yes | pip install --user --upgrade pip
 yes | pip install --user wheel mock
+sed -i "s/\/local\/lib64/\/lib64/g" .tf_configure.bazelrc 
 bazel build --config=opt //tensorflow/tools/pip_package:build_pip_package
 ./bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/tensorflow_pkg
 
