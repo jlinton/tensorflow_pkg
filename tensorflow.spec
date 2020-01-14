@@ -104,38 +104,46 @@ bazel build --config=opt --jobs 32 //tensorflow/tools/pip_package:build_pip_pack
 
 %install
 pip install --root=%{buildroot} /tmp/tensorflow_pkg/tensorflow-%{version}.0-cp37-cp37m-linux_$(uname -m).whl
-rm -rf %{buildroot}/usr/lib/python3.7/site-packages/gast-0.2.2.dist-info
-rm -rf %{buildroot}/usr/lib/python3.7/site-packages/gast
+rm -rf %{buildroot}%{python3_sitearch}/gast-0.2.2.dist-info
+rm -rf %{buildroot}%{python3_sitearch}/gast
 # Added
-rm -rf %{buildroot}/usr/lib/python3.7/site-packages/urlib3*
-rm -rf %{buildroot}/usr/lib/python3.7/site-packages/cachetools*
-rm -rf %{buildroot}/usr/lib/python3.7/site-packages/certifi*
-rm -rf %{buildroot}/usr/lib/python3.7/site-packages/chardet*
-rm -rf %{buildroot}/usr/lib/python3.7/site-packages/google*
-rm -rf %{buildroot}/usr/lib/python3.7/site-packages/inda*
-rm -rf %{buildroot}/usr/lib/python3.7/site-packages/oauth*
-rm -rf %{buildroot}/usr/lib/python3.7/site-packages/pasta*
-rm -rf %{buildroot}/usr/lib/python3.7/site-packages/pyasn1*
-rm -rf %{buildroot}/usr/lib/python3.7/site-packages/requests*
-rm -rf %{buildroot}/usr/lib/python3.7/site-packages/rsa*
-rm -rf %{buildroot}/usr/lib/python3.7/site-packages/wrapt*
-rm -rf %{buildroot}/usr/lib/python3.7/site-packages/grpc*
+rm -rf %{buildroot}%{python3_sitearch}/urlib3*
+rm -rf %{buildroot}%{python3_sitearch}/urllib3*
+rm -rf %{buildroot}%{python3_sitearch}/cachetools*
+rm -rf %{buildroot}%{python3_sitearch}/certifi*
+rm -rf %{buildroot}%{python3_sitearch}/chardet*
+rm -rf %{buildroot}%{_bindir}/chardetect
+rm -rf %{buildroot}%{python3_sitearch}/google*
+rm -rf %{buildroot}%{_bindir}/google-oauthlib-tool
+rm -rf %{buildroot}%{python3_sitearch}/inda*
+rm -rf %{buildroot}%{python3_sitearch}/idna*
+rm -rf %{buildroot}%{python3_sitearch}/oauth*
+rm -rf %{buildroot}%{python3_sitearch}/pasta*
+rm -rf %{buildroot}%{python3_sitearch}/pyasn1*
+rm -rf %{buildroot}%{python3_sitearch}/requests*
+rm -rf %{buildroot}%{python3_sitearch}/rsa*
+rm -rf %{buildroot}%{python3_sitearch}/wrapt*
+rm -rf %{buildroot}%{python3_sitearch}/grpc*
+rm -rf %{buildroot}%{python3_sitearch}/opt_einsum*
+rm -rf %{buildroot}%{_bindir}/pyrsa*
 #
 #rm -rf %{buildroot}/usr/lib64/python3.7/site-packages/grpc
 #rm -rf %{buildroot}/usr/lib64/python3.7/site-packages/grpcio-1.19.0.dist-info
-rm -rf %{buildroot}/usr/lib/python3.7/site-packages/backports.weakref-1.0.post1.dist-info
-rm -rf %{buildroot}/usr/lib/python3.7/site-packages/backports
+rm -rf %{buildroot}%{python3_sitearch}/backports.weakref-1.0.post1.dist-info
+rm -rf %{buildroot}%{python3_sitearch}/backports
+
+
 mv %{buildroot}/%{python_sitearch}/%{pypi_name}-%{version}.0.dist-info %{buildroot}/%{python_sitelib}/%{pypi_name}-%{version}.dist-info
 
 
 
 %files -n  python3-%{pypi_name}
 #%{python_sitelib}/%{pypi_name}
-%{python_sitelib}/tensorflow_core/*
-%{python_sitelib}/tensorboard
-%{python_sitelib}/%{pypi_name}-%{version}.dist-info
-%{python_sitelib}/tensorflow_estimator
-%{python_sitelib}/tensorflow_estimator-2.0.1.dist-info
+%{python3_sitearch}/tensorflow_core/*
+%{python3_sitearch}/tensorboard
+%{python3_sitearch}/%{pypi_name}-%{version}.dist-info
+%{python3_sitearch}/tensorflow_estimator
+%{python3_sitearch}/tensorflow_estimator-2.0.1.dist-info
 #%{_bindir}/freeze_graph
 %{_bindir}/tensorboard
 %{_bindir}/estimator_ckpt_converter
@@ -144,6 +152,7 @@ mv %{buildroot}/%{python_sitearch}/%{pypi_name}-%{version}.0.dist-info %{buildro
 %{_bindir}/tflite_convert
 %{_bindir}/toco
 %{_bindir}/toco_from_protos
+
 
 
 %pre
