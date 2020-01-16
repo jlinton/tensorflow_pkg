@@ -3,7 +3,7 @@
 
 Name:           tensorflow
 Version:        2.0
-Release:        2.0%{?dist}
+Release:        %{?dist}
 Summary:        A framework used for deep learning
 
 
@@ -133,17 +133,17 @@ rm -rf %{buildroot}%{python3_sitearch}/backports.weakref-1.0.post1.dist-info
 rm -rf %{buildroot}%{python3_sitearch}/backports
 
 
-mv %{buildroot}/%{python_sitearch}/%{pypi_name}-%{version}.0.dist-info %{buildroot}/%{python_sitelib}/%{pypi_name}-%{version}.dist-info
+#mv %{buildroot}/%{python_sitearch}/%{pypi_name}-%{version}.0.dist-info %{buildroot}/%{python_sitelib}/%{pypi_name}-%{version}.dist-info
 
 
 
 %files -n  python3-%{pypi_name}
 #%{python_sitelib}/%{pypi_name}
 %{python3_sitearch}/tensorflow_core/*
-%{python3_sitearch}/tensorboard
-%{python3_sitearch}/%{pypi_name}-%{version}.dist-info
-%{python3_sitearch}/tensorflow_estimator
-%{python3_sitearch}/tensorflow_estimator-2.0.1.dist-info
+#%{python3_site}/tensorboard
+%{python3_sitearch}/%{pypi_name}-%{version}.0.dist-info
+#%{python_sitelib}/tensorflow_estimator
+#%{python3_sitearch}/tensorflow_estimator-2.0.1.dist-info
 #%{_bindir}/freeze_graph
 %{_bindir}/tensorboard
 %{_bindir}/estimator_ckpt_converter
