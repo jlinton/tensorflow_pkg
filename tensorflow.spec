@@ -3,7 +3,7 @@
 
 Name:           tensorflow
 Version:        2.0
-Release:        %{?dist}
+Release:        1%{?dist}
 Summary:        A framework used for deep learning
 
 
@@ -13,6 +13,7 @@ Source0:        https://github.com/jlinton/tensorflow/archive/36ec840f8c5e504e4f
 Patch0:         Config-tensorflow.patch
 Patch1:         adding_python_bin_path.patch
 
+#todo, fix the -devels with pkg-config
 BuildRequires:  python-devel
 BuildRequires:  patch
 BuildRequires:  gcc
@@ -22,16 +23,16 @@ BuildRequires:  gcc-c++
 BuildRequires:  python3-six
 BuildRequires:  python3-pip
 BuildRequires:  bazel
+#BuildRequires:  copr://vbatts/bazel
 BuildRequires:  hdf5-devel
 BuildRequires:  numpy
 BuildRequires:  python3-numpy
-BuildRequires:  python3-google-apputils
+#BuildRequires:  python3-google-apputils
 BuildRequires:  protobuf
 BuildRequires:  python3-termcolor
 BuildRequires:  python3-werkzeug
 BuildRequires:  python3-markdown
 BuildRequires:  python3-setuptools
-#BuildRequires:  python2-backports
 
 
 Provides:       python3-tensorflow
@@ -81,6 +82,8 @@ more CPUs in a desktop, server, or mobile device without rewriting code.
 %setup -n tensorflow-36ec840f8c5e504e4fe187bdb802918f621603d6
 %patch0 -p0
 %patch1 -p0
+#dnf copr enable -y vbatts/bazel
+#dnf install -y bazel
 
 
 %build
@@ -104,16 +107,23 @@ bazel build --config=opt --jobs 32 //tensorflow/tools/pip_package:build_pip_pack
 
 %install
 pip install --root=%{buildroot} /tmp/tensorflow_pkg/tensorflow-%{version}.0-cp37-cp37m-linux_$(uname -m).whl
+# Added big hammer
 rm -rf %{buildroot}%{python3_sitearch}/gast-0.2.2.dist-info
-rm -rf %{buildroot}%{python3_sitearch}/gast
-# Added
+rm -rf %{buildroot}%{python3_sitearch}/gast*
+rm -rf %{buildroot}%{python3_sitelib}/gast*
 rm -rf %{buildroot}%{python3_sitearch}/urlib3*
+rm -rf %{buildroot}%{python3_sitelib}/urlib3*
 rm -rf %{buildroot}%{python3_sitearch}/urllib3*
+rm -rf %{buildroot}%{python3_sitelib}/urllib3*
 rm -rf %{buildroot}%{python3_sitearch}/cachetools*
+rm -rf %{buildroot}%{python3_sitelib}/cachetools*
 rm -rf %{buildroot}%{python3_sitearch}/certifi*
+rm -rf %{buildroot}%{python3_sitelib}/certifi*
 rm -rf %{buildroot}%{python3_sitearch}/chardet*
+rm -rf %{buildroot}%{python3_sitelib}/chardet*
 rm -rf %{buildroot}%{_bindir}/chardetect
 rm -rf %{buildroot}%{python3_sitearch}/google*
+rm -rf %{buildroot}%{python3_sitelib}/google*
 rm -rf %{buildroot}%{_bindir}/google-oauthlib-tool
 rm -rf %{buildroot}%{python3_sitearch}/inda*
 rm -rf %{buildroot}%{python3_sitearch}/idna*
@@ -125,12 +135,23 @@ rm -rf %{buildroot}%{python3_sitearch}/rsa*
 rm -rf %{buildroot}%{python3_sitearch}/wrapt*
 rm -rf %{buildroot}%{python3_sitearch}/grpc*
 rm -rf %{buildroot}%{python3_sitearch}/opt_einsum*
+rm -rf %{buildroot}%{python3_sitelib}/inda*
+rm -rf %{buildroot}%{python3_sitelib}/idna*
+rm -rf %{buildroot}%{python3_sitelib}/oauth*
+rm -rf %{buildroot}%{python3_sitelib}/pasta*
+rm -rf %{buildroot}%{python3_sitelib}/pyasn1*
+rm -rf %{buildroot}%{python3_sitelib}/requests*
+rm -rf %{buildroot}%{python3_sitelib}/rsa*
+rm -rf %{buildroot}%{python3_sitelib}/wrapt*
+rm -rf %{buildroot}%{python3_sitelib}/grpc*
+rm -rf %{buildroot}%{python3_sitelib}/opt_einsum*
 rm -rf %{buildroot}%{_bindir}/pyrsa*
 #
 #rm -rf %{buildroot}/usr/lib64/python3.7/site-packages/grpc
 #rm -rf %{buildroot}/usr/lib64/python3.7/site-packages/grpcio-1.19.0.dist-info
 rm -rf %{buildroot}%{python3_sitearch}/backports.weakref-1.0.post1.dist-info
-rm -rf %{buildroot}%{python3_sitearch}/backports
+rm -rf %{buildroot}%{python3_sitearch}/backports*
+rm -rf %{buildroot}%{python3_sitlib}/backports*
 
 
 #mv %{buildroot}/%{python_sitearch}/%{pypi_name}-%{version}.0.dist-info %{buildroot}/%{python_sitelib}/%{pypi_name}-%{version}.dist-info
@@ -139,7 +160,15 @@ rm -rf %{buildroot}%{python3_sitearch}/backports
 
 %files -n  python3-%{pypi_name}
 #%{python_sitelib}/%{pypi_name}
-%{python3_sitearch}/tensorflow_core/*
+%{python3_sitelib}/tensorboard*
+%{python3_sitearch}/tensorflow/*
+#%{python3_sitearch}/tensorboard*
+%{python3_sitelib}/tensorflow_core*
+%{python3_sitearch}/tensorflow_core*
+%{python3_sitelib}/tensorflow_estimator*
+#%{python3_sitearch}/tensorflow_estimator*
+
+
 #%{python3_site}/tensorboard
 %{python3_sitearch}/%{pypi_name}-%{version}.0.dist-info
 #%{python_sitelib}/tensorflow_estimator
