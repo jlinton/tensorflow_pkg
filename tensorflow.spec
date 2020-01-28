@@ -100,7 +100,7 @@ yes | pip install --user Keras-Applications
 yes | pip install --user Keras-Preprocessing
 yes | pip install --user protobuf
 sed -i "s/\/local\/lib64/\/lib64/g" .tf_configure.bazelrc 
-bazel build --config=opt --jobs 32 //tensorflow/tools/pip_package:build_pip_package
+bazel build --config=opt //tensorflow/tools/pip_package:build_pip_package
 ./bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/tensorflow_pkg
 
 
